@@ -1,9 +1,9 @@
 import Loading from "../../component/Loading";
 import React, { useState } from "react";
-import { register } from "../../apis/AuthApiS";
+import { register, login } from "../../apis/AuthApiS";
 import { useNavigate } from "react-router-dom";
 
-function FormRegister() {
+function AuthForm({ btnText,titleForm }) {
   const [loading, setLoading] = useState(false);
   const [messageError, setMessageError] = useState("");
   const [formData, setFormData] = useState({
@@ -22,9 +22,15 @@ function FormRegister() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await register(formData);
-      console.log("register res", res);
-      navigate("/");
+      if (btnText === "Register") {
+        const res = await register(formData);
+        // console.log("register res", res);
+        navigate("/");
+      } else {
+        const res = await login(formData);
+        // console.log("login res", res);
+        navigate("/");
+      }
     } catch (err) {
       showErrorMessage(err.response.data.message);
     } finally {
@@ -57,20 +63,23 @@ function FormRegister() {
             className="flex flex-col items-start justify-start ps-5 sm:ps-10 w-full sm:w-[50%] h-full py-6"
           >
             <h1 className="text-3xl sm:text-4xl py-4 sm:py-6 text-green-500 font-medium">
-              Register Now
+              {titleForm}
             </h1>
-            <div className="div-input-custom w-full">
-              <input
-                className="form-input-custom w-full"
-                placeholder="Enter your name"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-              />
-              <label className="label-custom">Name</label>
-            </div>
+            {btnText === "Register" && (
+              <div className="div-input-custom w-full">
+                <input
+                  className="form-input-custom w-full"
+                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                />
+                <label className="label-custom">Name</label>
+              </div>
+            )}
+
             <div className="div-input-custom w-full">
               <input
                 className="form-input-custom w-full"
@@ -107,7 +116,7 @@ function FormRegister() {
   text-[15px]
   w-[40%] sm:w-auto"
             >
-              Register
+              {btnText}
             </button>
             {messageError && <MessageError message={messageError} />}
           </form>
@@ -137,4 +146,4 @@ function MessageError({ message }) {
   );
 }
 
-export default FormRegister;
+export default AuthForm;
