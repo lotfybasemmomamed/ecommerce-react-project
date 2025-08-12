@@ -1,11 +1,13 @@
+import FormRegister from './Auth/FormRegister'
+import { Routes, Route } from "react-router-dom";
 
 export default function HomePage() {
 
   return (
     <>
-    <h1 class="text-3xl font-bold underline">
-    aaaaaaaaaaaaa
-  </h1>
+    <Routes>
+      <Route path="/register" element={<FormRegister/>}/>
+    </Routes>
     </>
   )
 }
