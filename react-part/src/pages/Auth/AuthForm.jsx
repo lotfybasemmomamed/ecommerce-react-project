@@ -2,8 +2,9 @@ import Loading from "../../component/Loading";
 import React, { useState } from "react";
 import { register, login } from "../../apis/AuthApiS";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
-function AuthForm({ btnText,titleForm }) {
+function AuthForm({ btnText, titleForm }) {
   const [loading, setLoading] = useState(false);
   const [messageError, setMessageError] = useState("");
   const [formData, setFormData] = useState({
@@ -12,7 +13,9 @@ function AuthForm({ btnText,titleForm }) {
     password: "",
   });
   const navigate = useNavigate();
+  const cookie = new Cookies();
 
+  //function for show error
   function showErrorMessage(message) {
     setMessageError(message);
     setTimeout(() => setMessageError(""), 3000);
@@ -20,15 +23,31 @@ function AuthForm({ btnText,titleForm }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    //validation
+    if (formData.name === "" && btnText === "Register") {
+      showErrorMessage("please enter your name");
+      return;
+    } else if (formData.email === "") {
+      showErrorMessage("please enter your E-mail");
+      return;
+    } else if (formData.password.length < 8) {
+      showErrorMessage(
+        "pasword very shortly, enter password more than 8 characters"
+      );
+      return;
+    }
     setLoading(true);
+
     try {
       if (btnText === "Register") {
         const res = await register(formData);
-        // console.log("register res", res);
+        console.log("register res", res);
+        cookie.set("Bearer", res.data.token);
         navigate("/");
       } else {
         const res = await login(formData);
         // console.log("login res", res);
+        cookie.set("Bearer", res.data.token);
         navigate("/");
       }
     } catch (err) {
@@ -118,6 +137,14 @@ function AuthForm({ btnText,titleForm }) {
             >
               {btnText}
             </button>
+            {btnText !== "Register" && (
+              <a href="http://127.0.0.1:8000/login-google">
+                <button type="button" className="login-with-google-btn">
+                  Sign in with Google
+                </button>
+              </a>
+            )}
+
             {messageError && <MessageError message={messageError} />}
           </form>
         </div>
