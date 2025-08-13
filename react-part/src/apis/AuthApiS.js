@@ -17,6 +17,7 @@ function getAuthConfig() {
 export const register = (formData)=>axios.post(`${baseUrl}/register`,formData)
 export const login = (formData)=>axios.post(`${baseUrl}/login`,formData)
 export const logout = ()=>axios.get(`${baseUrl}/logout`,getAuthConfig())
+export const googleCallBack =(location)=>axios.get(`${baseUrl}/auth/google/callback${location}`)
 
 
 

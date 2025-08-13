@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { register, login } from "../../apis/AuthApiS";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+import './Auth.css'
 
 function AuthForm({ btnText, titleForm }) {
   const [loading, setLoading] = useState(false);
@@ -64,7 +65,7 @@ function AuthForm({ btnText, titleForm }) {
           <Loading color="green" />
         </div>
       )}
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center container">
         <div
           className="
           w-[90%] sm:w-[80%] 
@@ -137,13 +138,13 @@ function AuthForm({ btnText, titleForm }) {
             >
               {btnText}
             </button>
-            {btnText !== "Register" && (
+           
               <a href="http://127.0.0.1:8000/login-google">
                 <button type="button" className="login-with-google-btn">
-                  Sign in with Google
+                  {btnText === "Register"?"Register With Google":"Login With Google"}
                 </button>
               </a>
-            )}
+            
 
             {messageError && <MessageError message={messageError} />}
           </form>
