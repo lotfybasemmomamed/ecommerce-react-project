@@ -2,6 +2,7 @@ import HomePage from './pages/HomePage'
 import { Routes, Route } from "react-router-dom";
 import AuthForm from "./pages/Auth/AuthForm";
 import GoogleCallBack from "./pages/Auth/GoogleCallBack";
+import Dashboard from './pages/Dashboard/Dashboard'
 
 
 
@@ -9,7 +10,7 @@ function App() {
 
   return (
   <Routes>
-    {/* website routes */}
+    {/* public routes */}
         <Route
           path="/"
           element={<HomePage/>}
@@ -26,7 +27,16 @@ function App() {
           path="/auth/google/callback"
           element={<GoogleCallBack />}
         />
-        {/*end website routes */}
+        {/* protected routes */}
+        <Route
+          path="/dashboard"
+          element={<Dashboard />}
+        >
+        <Route
+          path="users"
+           element={<Dashboard />}
+        />
+          </Route>
       </Routes>                  
   )
 }
