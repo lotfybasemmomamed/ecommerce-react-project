@@ -11,19 +11,22 @@ function SideBar() {
   const { windowWidth } = useWindowWidth();
   console.log("windowWidth", windowWidth);
   return (
+    <>
+  {windowWidth < 768&&menuBar&&<div className="bg-[rgba(0,0,0,0.1)] fixed left-0 top-[70px] h-full w-full"></div>} 
  <aside
   className={`
-    sticky top-[75px] left-0 h-screen p-4 flex flex-col bg-white shadow-xl 
+     top-[75px] left-0 h-screen p-4 flex flex-col bg-white shadow-xl 
     transition-all duration-300 ease-in-out
     ${
       windowWidth < 768
         ? menuBar
           ? "w-[70px] left-0"
-          : "left-[-100%]"
+          : "left-[-100%] "
         : menuBar
-        ? "w-[250px]"
-        : "w-[70px]"
+        ? "w-[250px] "
+        : "w-[70px] "
     }
+    ${windowWidth < 768? "fixed":"sticky"}
   `}
 >
       <nav className="flex-1">
@@ -57,7 +60,9 @@ function SideBar() {
         </ul>
       </nav>
     </aside> 
+     </>
   );
 }
+
 
 export default SideBar;

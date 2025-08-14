@@ -5,6 +5,7 @@ import GoogleCallBack from "./pages/Auth/GoogleCallBack";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import RequireAuth from "./pages/Auth/RequireAuth";
 import UsersTable from './pages/Dashboard/UsersTable'
+import EditUser from "./pages/Dashboard/EditUser";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route element={<RequireAuth/>}>
         <Route path="dashboard" element={<Dashboard />}>
           <Route path="users" element={<UsersTable/>} />
+          <Route path="user/:id" element={<EditUser/>} />
         </Route>
       </Route>
     </Routes>
