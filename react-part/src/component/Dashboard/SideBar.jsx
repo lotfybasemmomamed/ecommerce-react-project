@@ -13,7 +13,7 @@ function SideBar() {
   return (
  <aside
   className={`
-    fixed top-[75px] left-0 h-screen p-4 flex flex-col bg-white shadow-xl 
+    sticky top-[75px] left-0 h-screen p-4 flex flex-col bg-white shadow-xl 
     transition-all duration-300 ease-in-out
     ${
       windowWidth < 768

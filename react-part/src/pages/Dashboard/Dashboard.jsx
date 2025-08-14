@@ -2,18 +2,18 @@ import { Outlet } from "react-router-dom";
 import SideBar from "../../component/Dashboard/SideBar";
 import TopBar from "../../component/Dashboard/TopBar";
 
-import React from 'react'
+import React from "react";
 
 function Dashboard() {
   return (
     <div>
-        <TopBar/>
-        <SideBar/>
-        <Outlet/>
-      
+      <TopBar />
+      <div className="flex">
+        <SideBar />
+        <Outlet />
+      </div>
     </div>
-  )
+  );
 }
 
-export default Dashboard
-
+export default Dashboard;
