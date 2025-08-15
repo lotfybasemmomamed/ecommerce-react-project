@@ -1,12 +1,12 @@
-import Loading from "../../component/Loading";
+import Loading from "../Loading";
 import React, { useState, useEffect } from "react";
 import { register, login } from "../../apis/AuthApiS";
 import { useNavigate } from "react-router-dom";
-import { editUserData } from "../../apis/UsersApis";
+import { editUserData,addUser } from "../../apis/UsersApis";
 import Cookies from "universal-cookie";
-import "./Auth.css";
+import "./Form.css";
 
-function AuthForm({
+function Form({
   btnText,
   titleForm,
   id = "",
@@ -19,7 +19,8 @@ function AuthForm({
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(FormData);
   const [messageError, setMessageError] = useState("");
-  const disabled = formData.password == "" || formData.email == "";
+  const disabled =
+    (formData.password == "" && formData.name == "") || formData.email == "";
 
   const navigate = useNavigate();
   const cookie = new Cookies();
@@ -70,11 +71,15 @@ function AuthForm({
         // console.log("login res", res);
         cookie.set("Bearer", res.data.token);
         navigate("/");
+      } else if (btnText === "Add") {
+       await addUser(formData);
+        
+        navigate("/dashboard/users");
       } else {
         editUserData(id, formData).then((res) =>
           console.log("res edit user data", res)
         );
-        navigate("/dashboard");
+        navigate("/dashboard/users");
       }
     } catch (err) {
       showErrorMessage(err.response.data.message);
@@ -105,12 +110,14 @@ function AuthForm({
         >
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col items-start justify-start ps-5 sm:ps-10 w-full sm:w-[50%] h-full py-6"
+            className="flex flex-col items-start justify-start ps-5 sm:ps-10 w-full sm:w-[40%] h-full py-6"
           >
             <h1 className="text-3xl sm:text-4xl py-4 sm:py-6 text-green-500 font-medium">
               {titleForm}
             </h1>
-            {btnText === "Register" || btnText === "Update" ? (
+            {btnText === "Register" ||
+            btnText === "Update" ||
+            btnText === "Add" ? (
               <div className="div-input-custom w-full">
                 <input
                   className="form-input-custom w-full"
@@ -154,21 +161,27 @@ function AuthForm({
                 <label className="label-custom">Password</label>
               </div>
             )}
-
-            {/* <button
-              className=" bg-green-500 
-  px-8 sm:px-12 md:px-20 
-  mt-5 mb-[30px] py-[10px] 
-  rounded 
-  text-white 
-  hover:bg-green-400 
-  cursor-pointer 
-  text-[15px]
-  w-[40%] sm:w-auto"
-  disabled={disabled}
-            >
-              {btnText}
-            </button> */}
+            {(btnText === "Update" ||
+              btnText === "Add" )&& (
+                <div className="div-input-custom w-full">
+                  <select
+                    className="form-input-custom w-full"
+                    value={formData.role}
+                    onChange={(e) =>
+                      setFormData({ ...formData, role: e.target.value })
+                    }
+                    required
+                  >
+                    <option value="" disabled>
+                      Select role
+                    </option>
+                    <option value="1995">Admin</option>
+                    <option value="2001">User</option>
+                    <option value="1996">Writer</option>
+                  </select>
+                  <label className="label-custom">Role</label>
+                </div>
+              )}
 
             <button
               type="submit"
@@ -191,15 +204,16 @@ function AuthForm({
               {btnText}
             </button>
 
-            {btnText != "Update" && (
-              <a href="http://127.0.0.1:8000/login-google">
-                <button type="button" className="login-with-google-btn">
-                  {btnText === "Register"
-                    ? "Register With Google"
-                    : "Login With Google"}
-                </button>
-              </a>
-            )}
+            {(btnText == "Login" ||
+              btnText == "Register") && (
+                <a href="http://127.0.0.1:8000/login-google">
+                  <button type="button" className="login-with-google-btn">
+                    {btnText === "Register"
+                      ? "Register With Google"
+                      : "Login With Google"}
+                  </button>
+                </a>
+              )}
 
             {messageError && <MessageError message={messageError} />}
           </form>
@@ -229,4 +243,4 @@ function MessageError({ message }) {
   );
 }
 
-export default AuthForm;
+export default Form;

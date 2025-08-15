@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import AuthForm from "../Auth/AuthForm";
+import AuthForm from "../../component/form/Form";
 import { useEffect, useState } from "react";
 import { getUserById } from "../../apis/UsersApis";
 
@@ -15,6 +15,7 @@ function EditUser() {
       setUserData({
         name: data.data.name,
         email: data.data.email,
+        role: data.data.role,
         password: "",
       });
     });
