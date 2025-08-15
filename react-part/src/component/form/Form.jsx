@@ -65,7 +65,7 @@ function Form({
         const res = await register(formData);
         console.log("register res", res);
         cookie.set("Bearer", res.data.token);
-        navigate("/");
+        navigate("/dashboard");
       } else if (btnText === "Login") {
         const res = await login(formData);
         // console.log("login res", res);
