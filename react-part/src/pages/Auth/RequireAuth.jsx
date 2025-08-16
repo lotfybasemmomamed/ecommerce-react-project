@@ -4,8 +4,9 @@ import Loading from "../../component/Loading";
 import { getUsers } from "../../apis/UsersApis";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Forbidden403 from "./Forbidden403";
 
-function RequireAuth() {
+function RequireAuth({ allowedRole }) {
   const cookie = new Cookies();
   const token = cookie.get("Bearer");
   const [userData, setUserData] = useState("");
@@ -22,7 +23,11 @@ function RequireAuth() {
       <>
         {token ? (
           userData ? (
-            <Outlet />
+             allowedRole.includes(userData.role ) ? (
+              <Outlet />
+            ) : (
+              <Forbidden403 />
+            )
           ) : (
             <Loading color="green" />
           )

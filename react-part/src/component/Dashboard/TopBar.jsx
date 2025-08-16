@@ -6,17 +6,22 @@ import {
   faCog,
   faSignOutAlt,
   faChevronDown,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { useMenuBar } from "../../context/MenuBarContext";
 import { useWindowWidth } from "../../context/WindowContext.jsx";
 import { useState, useEffect, useRef } from "react";
 import { logout } from "../../apis/AuthApiS.js";
+import { getUsers } from "../../apis/UsersApis.js";
+import Cookies from "universal-cookie";
 
 function TopBar() {
   const { menuBar, setMenuBar } = useMenuBar();
   const { windowWidth } = useWindowWidth();
   const [open, setOpen] = useState(false);
+  const [userData, setUserData] = useState({});
   const dropdownRef = useRef(null);
+  const cookie = new Cookies();
 
   // close dropp down when click outside
   useEffect(() => {
@@ -31,10 +36,19 @@ function TopBar() {
     };
   }, []);
 
+  //get current user data
+  useEffect(() => {
+    getUsers().then((data) => {
+      console.log("userData", data);
+      setUserData(data.data);
+    });
+  }, []);
+
   //handleLogout
   async function handleLogout() {
     try {
       await logout();
+      cookie.remove("Bearer", { path: "/" });
       window.location.pathname = "/";
     } catch (err) {
       alert(err.response.data.message);
@@ -89,14 +103,18 @@ function TopBar() {
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => setOpen((prev) => !prev)}
           >
-            <img
+            {/* <img
               src="https://via.placeholder.com/40"
               alt="User Avatar"
               className="w-9 h-9 rounded-full"
-            />
+            /> */}
+            <div className="w-9 h-9 rounded-full flex items-center justify-center bg-blue-100">
+              <FontAwesomeIcon className=" text-2xl" icon={faUser} />
+            </div>
+
             <div className="hidden sm:block leading-tight">
-              <p className="text-sm font-medium">Kate Dudley</p>
-              <p className="text-xs text-gray-500">Administrator</p>
+              <p className="text-sm font-medium">{userData.name}</p>
+              <p className="text-xs text-gray-500">{userData.role=="1995"?"admin":userData.role=="1996"?"writer":"user"}</p>
             </div>
             <FontAwesomeIcon
               icon={faChevronDown}

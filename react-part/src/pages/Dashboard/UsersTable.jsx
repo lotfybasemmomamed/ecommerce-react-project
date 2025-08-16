@@ -10,7 +10,7 @@ const UsersTable = () => {
   const [loading, setLoading] = useState(false);
   const [deleteuser, setDeleteUesr] = useState(false);
 
-  //get id fot curent user
+  //get id fot current user
   useEffect(() => {
     getUsers().then((data) => {
       console.log("userData", data);

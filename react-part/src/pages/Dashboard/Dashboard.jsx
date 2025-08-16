@@ -8,9 +8,11 @@ function Dashboard() {
   return (
     <div>
       <TopBar />
-      <div className="flex">
+      <div className="flex ">
         <SideBar />
-        <Outlet />
+         <div className="flex-1 p-4 overflow-auto">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

@@ -122,6 +122,7 @@ function Form({
                 <input
                   className="form-input-custom w-full"
                   placeholder="Enter your name"
+                  type="text"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
@@ -138,6 +139,7 @@ function Form({
               <input
                 className="form-input-custom w-full"
                 placeholder="Enter your e-mail"
+                type="email"
                 value={formData.email}
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
@@ -150,6 +152,7 @@ function Form({
               <div className="div-input-custom w-full">
                 <input
                   className="form-input-custom w-full"
+                  type="password"
                   placeholder="Enter your password"
                   required
                   value={formData.password}
