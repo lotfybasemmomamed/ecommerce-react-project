@@ -19,6 +19,7 @@ function Form({
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(FormData);
   const [messageError, setMessageError] = useState("");
+  
   const disabled =
     (formData.password == "" && formData.name == "") || formData.email == "";
 
@@ -65,12 +66,14 @@ function Form({
         const res = await register(formData);
         console.log("register res", res);
         cookie.set("Bearer", res.data.token);
-        navigate("/dashboard");
+        const goToPage =res.data.user.role=="1995"?"/dashboard":res.data.user.role=="1996"?"/dashboard/writer":"/"
+        navigate(goToPage);
       } else if (btnText === "Login") {
         const res = await login(formData);
         // console.log("login res", res);
         cookie.set("Bearer", res.data.token);
-        navigate("/");
+        const goToPage =res.data.user.role=="1995"?"/dashboard":res.data.user.role=="1996"?"/dashboard/writer":"/"
+        navigate(goToPage);
       } else if (btnText === "Add") {
        await addUser(formData);
         

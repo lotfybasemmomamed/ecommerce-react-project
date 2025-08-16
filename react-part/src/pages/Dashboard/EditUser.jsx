@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import AuthForm from "../../component/form/Form";
 import { useEffect, useState } from "react";
 import { getUserById } from "../../apis/UsersApis";
+import Loading from "../../component/Loading";
 
 function EditUser() {
   const [userData, setUserData] = useState({
@@ -9,7 +10,9 @@ function EditUser() {
     email: "",
     password: "",
   });
+  const[loading,setLoading]=useState(false)
   useEffect(() => {
+    setLoading(true)
     getUserById(id).then((data) => {
       console.log("res get user by id", data.data);
       setUserData({
@@ -18,13 +21,14 @@ function EditUser() {
         role: data.data.role,
         password: "",
       });
-    });
+    }).catch(()=>{window.location.pathname="/dashboard/page/404"}).finally(()=>setLoading(false));
   }, []);
   
   const { id } = useParams();
 
   return (
-    <div className="h-full w-full">
+    <>{loading&&<Loading color="green"/>}
+       <div className="h-full w-full">
       <AuthForm
         btnText="Update"
         titleForm="Update User Data"
@@ -32,6 +36,8 @@ function EditUser() {
         FormData={userData}
       />
     </div>
+    </>
+ 
   );
 }
 

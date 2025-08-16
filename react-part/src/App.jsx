@@ -8,6 +8,8 @@ import UsersTable from "./pages/Dashboard/UsersTable";
 import EditUser from "./pages/Dashboard/EditUser";
 import AddUser from "./pages/Dashboard/AddUser";
 import Writer from "./pages/Dashboard/Writer";
+import RequireBack from "./pages/Auth/RequireBack";
+import Error404 from "./pages/Auth/Error404";
 // import Forbidden403 from "./pages/Auth/Forbidden403";
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
     <Routes>
       {/* public routes */}
       <Route path="/" element={<HomePage />} />
+      <Route path="/*" element={<Error404 />} />
+      <Route element={<RequireBack/>}>
       <Route
         path="/register"
         element={<Form btnText="Register" titleForm="Register Now" />}
@@ -23,6 +27,7 @@ function App() {
         path="/login"
         element={<Form btnText="Login" titleForm="Login Now" />}
       />
+      </Route>
       <Route path="/auth/google/callback" element={<GoogleCallBack />} />
       {/* <Route path="/403" element={<Forbidden403 />} /> */}
 
