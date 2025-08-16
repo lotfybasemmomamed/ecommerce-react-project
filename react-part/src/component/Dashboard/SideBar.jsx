@@ -57,7 +57,7 @@ function SideBar() {
     }`
                 }
               >
-                <FontAwesomeIcon icon={faUsers} />{" "}
+                <FontAwesomeIcon icon={faUsers} />
                 {menuBar && windowWidth > 768 && "Users"}
               </NavLink>
             )}
@@ -71,8 +71,21 @@ function SideBar() {
     }`
               }
             >
-              <FontAwesomeIcon icon={faUsers} />{" "}
+              <FontAwesomeIcon icon={faUsers} />
               {menuBar && windowWidth > 768 && "Writer"}
+            </NavLink>
+
+            <NavLink
+              to="categories"
+              className={({ isActive }) =>
+                `flex items-center gap-2 p-2 rounded cursor-pointer 
+    ${
+      isActive ? "bg-blue-100 text-blue-500" : "hover:bg-gray-100 text-gray-700"
+    }`
+              }
+            >
+              <FontAwesomeIcon icon={faUsers} />
+              {menuBar && windowWidth > 768 && "categories"}
             </NavLink>
           </ul>
         </nav>

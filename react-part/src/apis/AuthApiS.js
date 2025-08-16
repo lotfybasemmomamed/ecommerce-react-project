@@ -3,7 +3,6 @@ import Cookies  from 'universal-cookie'
 
 const baseUrl = 'http://127.0.0.1:8000/api'
 const cookie =new Cookies()
-//  const token = cookie.get("Bearer");
 function getAuthConfig() {
   const token = cookie.get("Bearer");
   return {

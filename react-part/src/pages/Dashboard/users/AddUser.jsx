@@ -1,4 +1,4 @@
-import Form from "../../component/form/Form";
+import Form from "../../../component/form/Form";
 
 function AddUser() {
  
