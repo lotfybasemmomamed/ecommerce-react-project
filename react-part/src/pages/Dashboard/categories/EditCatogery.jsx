@@ -1,11 +1,12 @@
-import React from 'react'
+import CategoryForm from "../../../component/form/CategoryForm";
 
 function EditCatogery() {
+
   return (
     <div>
-      <h1>EditCatogery</h1>
+      <CategoryForm btnMessage="Edit Category" />
     </div>
-  )
+  );
 }
 
-export default EditCatogery
+export default EditCatogery;

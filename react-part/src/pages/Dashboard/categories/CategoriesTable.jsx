@@ -1,14 +1,12 @@
-import { deleteUser, ShowUsers } from "../../../apis/UsersApis";
 import Table from "../../../component/Dashboard/Table";
-// import { deleteUser } from "../../apis/UsersApis";
 import { useEffect, useState } from "react";
 import Loading from "../../../component/Loading";
-import { getCategories } from "../../../apis/categories";
+import { getCategories,deleteCategory } from "../../../apis/categoriesApis";
 
 const CategoriesTable = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [deletedUser, setDeletedUser] = useState(false);
+  const [deletedCategory, setDeletedCategory] = useState(false);
   const tableHeader = [
     { name: "ID", key: "id" },
     { name: "TITLE", key: "title" },
@@ -20,16 +18,18 @@ const CategoriesTable = () => {
     setLoading(true);
     getCategories()
       .then((res) => {
-        console.log("res show users is", res.data);
+        console.log("res getCategories from categorytable is ", res);
         setCategories(res.data);
       })
+      .catch((err) => {
+        alert(err.response?.data?.message);
+      })
       .finally(() => setLoading(false));
-  }, [deletedUser]);
-  //delete user
-  function handleDeleteUser(id, currentUserId) {
-    if (id != currentUserId) {
-      deleteUser(id).then(() => setDeletedUser((prev) => !prev));
-    }
+  }, [deletedCategory]);
+
+  //delete category
+  function handleDeleteCategory(id) {
+    deleteCategory(id).then(() => setDeletedCategory((prev) => !prev));
   }
 
   return (
@@ -37,7 +37,7 @@ const CategoriesTable = () => {
       {loading && <Loading color="green" />}
       <Table
         data={categories}
-        deleteFunction={handleDeleteUser}
+        deleteFunction={handleDeleteCategory}
         tableHeader={tableHeader}
         type="categories"
       />

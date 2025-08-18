@@ -75,6 +75,7 @@ class CategoryController extends Controller
             $path = 'images';
             $file->move($path, $filename);
         }
+        $category->save();
     }
 
     /**
@@ -96,6 +97,6 @@ class CategoryController extends Controller
         if (File::exists($path)) {
             File::delete($path);
         }
-        $category::destroy();
+        $category->delete();
     }
 }

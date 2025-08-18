@@ -4,8 +4,7 @@ import CategoryForm from '../../../component/form/CategoryForm'
 function AddCategory() {
   return (
     <div>
-      <h1>AddCategory</h1>
-      <CategoryForm/>
+      <CategoryForm btnMessage="Add Category"/>
     </div>
   )
 }

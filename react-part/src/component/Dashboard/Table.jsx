@@ -70,24 +70,32 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
         <tr key={row.id} className="bg-white border-b hover:bg-gray-50">
           {tableHeader.map((col) => (
             <td key={col.key} className="px-2 py-2 sm:px-6 sm:py-4">
-              {col.key === "name" &&
-              row.id === currentUserData?.id &&
-              type == "users"
-                ? `${row[col.key]} (you)`
-                : row[col.key]}
+              {col.key == "image" && type === "categories" ? (
+                <img
+                  src={row[col.key]}
+                  alt={row.title}
+                  className="w-12 h-12 object-cover rounded-md"
+                />
+              ) : col.key === "name" &&
+                row.id === currentUserData?.id &&
+                type == "users" ? (
+                `${row[col.key]} (you)`
+              ) : (
+                row[col.key]
+              )}
             </td>
           ))}
 
           <td className="px-2 py-2 sm:px-6 sm:py-4 flex gap-2 sm:gap-3">
             <button
-              disabled={row.id === currentUserData?.id}
+              disabled={row.id === currentUserData?.id&&type === "users"}
               onClick={() => {
                 if (type === "users") {
                   if (row.id !== currentUserData?.id) {
-                   ;
+                    window.location.pathname=`dashboard/user/${currentUserData.id}`
                   }
                 } else if (type === "categories") {
-                   window.location.pathname = `dashboard/category/${row.id}`;
+                  window.location.pathname = `dashboard/category/${row.id}`;
                 }
               }}
               className="text-blue-600 disabled:text-gray-300 hover:enabled:text-blue-800 text-xs sm:text-base"
@@ -95,8 +103,8 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
               <FontAwesomeIcon fontSize={"15px"} icon={faEdit} />
             </button>
             <button
-              onClick={() => deleteFunction(row.id, currentUserData?.id)}
-              disabled={row.id === currentUserData?.id}
+              onClick={() => type==="users"? deleteFunction(row.id, currentUserData?.id):deleteFunction(row.id)}
+              disabled={row.id === currentUserData?.id&&type === "users"}
               className="text-red-600 disabled:text-gray-300 hover:enabled:text-red-800 text-xs sm:text-base"
             >
               <FontAwesomeIcon fontSize={"15px"} icon={faTrash} />
@@ -130,7 +138,7 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
       <div className="h-full w-full p-2 sm:p-4">
         <div className="flex justify-end mb-2">
           <button
-            onClick={() => (window.location.pathname = "dashboard/user/add")}
+            onClick={() => (window.location.pathname = `dashboard/${type==="users"?"user":"category"}/add`)}
             className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 sm:px-4 sm:py-2 rounded flex items-center justify-center gap-2"
           >
             <FontAwesomeIcon icon={faPlus} className="text-lg" />

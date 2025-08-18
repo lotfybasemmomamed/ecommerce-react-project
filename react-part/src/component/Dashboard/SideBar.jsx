@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faUsers, faPen,faList } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import { useWindowWidth } from "../../context/WindowContext.jsx";
 import { useMenuBar } from "../../context/MenuBarContext";
@@ -71,7 +71,7 @@ function SideBar() {
     }`
               }
             >
-              <FontAwesomeIcon icon={faUsers} />
+              <FontAwesomeIcon icon={faPen} />
               {menuBar && windowWidth > 768 && "Writer"}
             </NavLink>
 
@@ -84,7 +84,7 @@ function SideBar() {
     }`
               }
             >
-              <FontAwesomeIcon icon={faUsers} />
+              <FontAwesomeIcon icon={faList} />{" "}
               {menuBar && windowWidth > 768 && "categories"}
             </NavLink>
           </ul>
