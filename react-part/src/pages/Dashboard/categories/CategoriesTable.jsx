@@ -13,7 +13,7 @@ const CategoriesTable = () => {
     { name: "IMAGE", key: "image" },
   ];
 
-  //get all users
+  //get all categories
   useEffect(() => {
     setLoading(true);
     getCategories()

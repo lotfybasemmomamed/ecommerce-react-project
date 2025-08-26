@@ -5,6 +5,13 @@ import { ShowUsers, getUsers } from "../../apis/UsersApis";
 
 const Table = ({ data, deleteFunction, tableHeader, type }) => {
   const [currentUserData, setCurrentUserData] = useState({});
+  const [showProductImages, setShowProductImages] = useState(false);
+  const [selectedImages, setSelectedImages] = useState(null);
+
+  //close Images Product Div
+  function closeImagesProductDiv() {
+    setShowProductImages(false);
+  }
 
   //content of table
   const tableHeaderContent = tableHeader.map((item, index) => (
@@ -12,57 +19,6 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
       {item.name}
     </th>
   ));
-  // const tableBodyContent =   data.length > 0 ? (
-  //   tableHeader.map((user.key)=> data.map((user) => (
-  //                 <tr
-  //                   key={user.id}
-  //                   className="bg-white border-b hover:bg-gray-50"
-  //                 >
-  //                   <td className="px-2 py-2 sm:px-6 sm:py-4">{user.id}</td>
-  //                   <td className="px-2 py-2 sm:px-6 sm:py-4">
-  //                     {user.id === currentUserData.id
-  //                       ? `${user.name} (you)`
-  //                       : user.name}
-  //                   </td>
-  //                   <td className="px-2 py-2 sm:px-6 sm:py-4">{user.email}</td>
-  //                   <td className="px-2 py-2 sm:px-6 sm:py-4">
-  //                     {user.role == "1995"
-  //                       ? "admin"
-  //                       : user.role == "2001"
-  //                       ? "user"
-  //                       : user.role == "1999"?"product manager":"user"}
-  //                   </td>
-  //                   <td className="px-2 py-2 sm:px-6 sm:py-4 flex gap-2 sm:gap-3">
-  //                     <button
-  //                       disabled={user.id === currentUserData.id}
-  //                       onClick={() => {
-  //                         if (user.id !== currentUserData.id) {
-  //                           window.location.pathname = `dashboard/user/${user.id}`;
-  //                         }
-  //                       }}
-  //                       className="text-blue-600 disabled:text-gray-300 hover:enabled:text-blue-800 text-xs sm:text-base"
-  //                     >
-  //                       <FontAwesomeIcon fontSize={"15px"} icon={faEdit} />
-  //                     </button>
-  //                     <button
-  //                       onClick={() =>
-  //                         deleteFunction(user.id, currentUserData.id)
-  //                       }
-  //                       className="text-red-600 disabled:text-gray-300 hover:enabled:text-red-800 text-xs sm:text-base"
-  //                       disabled={user.id === currentUserData.id}
-  //                     >
-  //                       <FontAwesomeIcon fontSize={"15px"} icon={faTrash} />
-  //                     </button>
-  //                   </td>
-  //                 </tr>
-  //               ))
-  //             ) : (
-  //               <tr>
-  //                 <td colSpan="4" className="text-center py-4 text-gray-500">
-  //                   No users found
-  //                 </td>
-  //               </tr>
-  //             ))
 
   const tableBodyContent =
     data.length > 0 ? (
@@ -80,6 +36,25 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
                 row.id === currentUserData?.id &&
                 type == "users" ? (
                 `${row[col.key]} (you)`
+              ) : col.key === "images" && type === "products" ? (
+                <>
+                  <a
+                    className="text-blue-600 text-sm font-medium underline 
+              hover:text-blue-700 hover:cursor-pointer"
+                    onClick={() => {
+                      setShowProductImages((prev) => !prev);
+                      setSelectedImages(row[col.key]);
+                    }}
+                  >
+                    Show Images
+                  </a>
+                  {showProductImages && (
+                    <ProductImages
+                      images={selectedImages}
+                      onClose={closeImagesProductDiv}
+                    />
+                  )}
+                </>
               ) : (
                 row[col.key]
               )}
@@ -88,14 +63,16 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
 
           <td className="px-2 py-2 sm:px-6 sm:py-4 flex gap-2 sm:gap-3">
             <button
-              disabled={row.id === currentUserData?.id&&type === "users"}
+              disabled={row.id === currentUserData?.id && type === "users"}
               onClick={() => {
                 if (type === "users") {
                   if (row.id !== currentUserData?.id) {
-                    window.location.pathname=`dashboard/user/${currentUserData.id}`
+                    window.location.pathname = `dashboard/user/${currentUserData.id}`;
                   }
                 } else if (type === "categories") {
                   window.location.pathname = `dashboard/category/${row.id}`;
+                } else if (type === "products") {
+                  window.location.pathname = `dashboard/product/${row.id}`;
                 }
               }}
               className="text-blue-600 disabled:text-gray-300 hover:enabled:text-blue-800 text-xs sm:text-base"
@@ -103,8 +80,12 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
               <FontAwesomeIcon fontSize={"15px"} icon={faEdit} />
             </button>
             <button
-              onClick={() => type==="users"? deleteFunction(row.id, currentUserData?.id):deleteFunction(row.id)}
-              disabled={row.id === currentUserData?.id&&type === "users"}
+              onClick={() =>
+                type === "users"
+                  ? deleteFunction(row.id, currentUserData?.id)
+                  : deleteFunction(row.id)
+              }
+              disabled={row.id === currentUserData?.id && type === "users"}
               className="text-red-600 disabled:text-gray-300 hover:enabled:text-red-800 text-xs sm:text-base"
             >
               <FontAwesomeIcon fontSize={"15px"} icon={faTrash} />
@@ -118,7 +99,11 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
           colSpan={tableHeader.length + 1}
           className="text-center py-4 text-gray-500"
         >
-          {type === "users" ? "No users found" : "No categories found"}
+          {type === "users"
+            ? "No users found"
+            : type === "categories"
+            ? "No categories found"
+            : "No products found"}
         </td>
       </tr>
     );
@@ -131,19 +116,29 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
     });
   }, []);
 
-  // const usersFilter = users.filter((user) => user.id != currentUserId);
-
   return (
     <>
       <div className="h-full w-full p-2 sm:p-4">
         <div className="flex justify-end mb-2">
           <button
-            onClick={() => (window.location.pathname = `dashboard/${type==="users"?"user":"category"}/add`)}
+            onClick={() =>
+              (window.location.pathname = `dashboard/${
+                type === "users"
+                  ? "user"
+                  : type === "categories"
+                  ? "category"
+                  : "product"
+              }/add`)
+            }
             className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 sm:px-4 sm:py-2 rounded flex items-center justify-center gap-2"
           >
             <FontAwesomeIcon icon={faPlus} className="text-lg" />
             <span className="hidden sm:inline">
-              {type === "users" ? "Add User" : "Add Category"}
+              {type === "users"
+                ? "Add User"
+                : type === "categories"
+                ? "Add Category"
+                : "Add Product"}
             </span>
           </button>
         </div>
@@ -164,4 +159,50 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
   );
 };
 
+function ProductImages({ images, onClose }) {
+  const [showProductImages, setShowProductImages] = useState(true);
+  console.log(images);
+  return (
+    <>
+      {showProductImages && (
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.2)] flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-4 w-11/12 max-w-lg">
+            <h2 className="text-lg font-semibold mb-3 text-gray-700">
+              Product Images
+            </h2>
+            <>
+              {images.length > 0 ? (
+                <div className="flex gap-2 flex-wrap justify-center mb-4">
+                  <>
+                    {images.map((imgDetails, index) => (
+                      <img
+                        key={index}
+                        src={imgDetails.image}
+                        alt={`product-${index}`}
+                        className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-md border"
+                      />
+                    ))}
+                  </>
+                </div>
+              ) : (
+                <span className="flex justify-center text-2xl">
+                  No Images
+                </span>
+              )}
+            </>
+
+            <div className="flex justify-end">
+              <button
+                onClick={onClose}
+                className="bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 export default Table;

@@ -13,7 +13,9 @@ import Error404 from "./pages/Auth/Error404"
 import CategoriesTable from "./pages/Dashboard/categories/CategoriesTable";
 import EditCatogery from "./pages/Dashboard/categories/EditCatogery";
 import AddCategory from "./pages/Dashboard/categories/AddCategory";
-
+import ProductsTable from "./pages/Dashboard/products/ProductsTable";
+import EditProduct from './pages/Dashboard/products/EditProduct'
+import AddProduct from './pages/Dashboard/products/AddProduct'
 function App() {
   return (
     <Routes>
@@ -37,12 +39,18 @@ function App() {
       <Route element={<RequireAuth allowedRole={["1995", "1996","1999"]} />}>
         <Route path="dashboard" element={<Dashboard />}>
           <Route element={<RequireAuth allowedRole={["1995",'1999']} />}>
+          {/* users */}
             <Route path="users" element={<UsersTable />} />
             <Route path="user/:id" element={<EditUser />} />
             <Route path="user/add" element={<AddUser />} />
+            {/* categories */}
             <Route path="categories" element={<CategoriesTable />} />
              <Route path="category/:id" element={<EditCatogery />} />
              <Route path="category/add" element={<AddCategory />} />
+             {/* products */}
+            <Route path="products" element={<ProductsTable />} />
+             <Route path="product/:id" element={<EditProduct />} />
+             <Route path="product/add" element={<AddProduct />} />
           </Route>
           <Route element={<RequireAuth allowedRole={["1996","1995",'1999']} />}>
           <Route path="writer" element={<Writer />} />
