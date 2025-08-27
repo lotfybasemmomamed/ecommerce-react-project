@@ -3,11 +3,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { ShowUsers, getUsers } from "../../apis/UsersApis";
 import Pagination from "./Pagination";
+import { searchApi } from "../../apis/SearchApis";
 
-const Table = ({ data, deleteFunction, tableHeader, type,currentPage,pageCount }) => {
+const Table = ({
+  data,
+  deleteFunction,
+  tableHeader,
+  type,
+  currentPage,
+  pageCount,
+}) => {
   const [currentUserData, setCurrentUserData] = useState({});
   const [showProductImages, setShowProductImages] = useState(false);
   const [selectedImages, setSelectedImages] = useState(null);
+  const [search, setSearch] = useState("");
+  const [searchData, setSearchedData] = useState(null);
+  const showTableData = searchData ? searchData : data;
 
   const setUIRole = (role) => {
     return role == "1995"
@@ -19,10 +30,20 @@ const Table = ({ data, deleteFunction, tableHeader, type,currentPage,pageCount }
       : "user";
   };
 
-  console.log("table data",data)
+  console.log("table data", data);
   //close Images Product Div
   function closeImagesProductDiv() {
     setShowProductImages(false);
+  }
+
+  //get Searched Data via api
+  function getSearchedData() {
+    const searchType =
+      type === "users" ? "user" : type === "products" ? "product" : "category";
+    searchApi(searchType, search).then((res) => {
+      console.log("res search Api", res);
+      setSearchedData(res.data);
+    });
   }
 
   //content of table
@@ -33,8 +54,8 @@ const Table = ({ data, deleteFunction, tableHeader, type,currentPage,pageCount }
   ));
 
   const tableBodyContent =
-    data.length > 0 ? (
-      data.map((row) => (
+    showTableData.length > 0 ? (
+      showTableData.map((row) => (
         <tr key={row.id} className="bg-white border-b hover:bg-gray-50">
           {tableHeader.map((col) => (
             <td key={col.key} className="px-2 py-2 sm:px-6 sm:py-4">
@@ -44,7 +65,6 @@ const Table = ({ data, deleteFunction, tableHeader, type,currentPage,pageCount }
                   alt={row.title}
                   className="w-12 h-12 object-cover rounded-md"
                 />
-    
               ) : col.key === "name" &&
                 row.id === currentUserData?.id &&
                 type == "users" ? (
@@ -131,31 +151,50 @@ const Table = ({ data, deleteFunction, tableHeader, type,currentPage,pageCount }
     });
   }, []);
 
+  //show shearched data
+  useEffect(() => {
+   const  timer = setTimeout(() => {
+      getSearchedData();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   return (
     <>
       <div className="h-full w-full p-2 sm:p-4">
-        <div className="flex justify-end mb-2">
-          <button
-            onClick={() =>
-              (window.location.pathname = `dashboard/${
-                type === "users"
-                  ? "user"
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mb-2">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            className="w-full sm:w-64 border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <div className="flex justify-end mb-2">
+            <button
+              onClick={() =>
+                (window.location.pathname = `dashboard/${
+                  type === "users"
+                    ? "user"
+                    : type === "categories"
+                    ? "category"
+                    : "product"
+                }/add`)
+              }
+              className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 sm:px-4 sm:py-2 rounded flex items-center justify-center gap-2"
+            >
+              <FontAwesomeIcon icon={faPlus} className="text-lg" />
+              <span className="hidden sm:inline">
+                {type === "users"
+                  ? "Add User"
                   : type === "categories"
-                  ? "category"
-                  : "product"
-              }/add`)
-            }
-            className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 sm:px-4 sm:py-2 rounded flex items-center justify-center gap-2"
-          >
-            <FontAwesomeIcon icon={faPlus} className="text-lg" />
-            <span className="hidden sm:inline">
-              {type === "users"
-                ? "Add User"
-                : type === "categories"
-                ? "Add Category"
-                : "Add Product"}
-            </span>
-          </button>
+                  ? "Add Category"
+                  : "Add Product"}
+              </span>
+            </button>
+          </div>
         </div>
 
         <div className="h-full overflow-x-auto sm:overflow-x-hidden shadow-md sm:rounded-lg">
@@ -170,7 +209,7 @@ const Table = ({ data, deleteFunction, tableHeader, type,currentPage,pageCount }
           </table>
         </div>
       </div>
-      <Pagination currentPage={currentPage} pageCount={pageCount}/>
+      <Pagination currentPage={currentPage} pageCount={pageCount} />
     </>
   );
 };
