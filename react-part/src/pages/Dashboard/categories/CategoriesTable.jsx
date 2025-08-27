@@ -14,8 +14,12 @@ const CategoriesTable = () => {
   const tableHeader = [
     { name: "ID", key: "id" },
     { name: "TITLE", key: "title" },
+    { name: "CREATED AT", key: "created_at" },
+    { name: "UPDATED AT", key: "updated_at" },
     { name: "IMAGE", key: "image" },
   ];
+
+  
 
   //get all categories
   useEffect(() => {

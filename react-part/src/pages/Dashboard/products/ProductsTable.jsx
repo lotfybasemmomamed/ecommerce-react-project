@@ -16,6 +16,8 @@ const ProductsTable = () => {
     { name: "TITLE", key: "title" },
     { name: "IMAGES", key: "images" },
     { name: "DESCRIPTION", key: "description" },
+    { name: "CREATED AT", key: "created_at" },
+    { name: "UPDATED AT", key: "updated_at" },
     { name: "PRICE", key: "price" },
     { name: "RATING", key: "rating" },
   ];

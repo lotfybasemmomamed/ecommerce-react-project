@@ -4,6 +4,7 @@ import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { ShowUsers, getUsers } from "../../apis/UsersApis";
 import Pagination from "./Pagination";
 import { searchApi } from "../../apis/SearchApis";
+import handleDate from "../../helpers/handleDate";
 
 const Table = ({
   data,
@@ -16,9 +17,10 @@ const Table = ({
   const [currentUserData, setCurrentUserData] = useState({});
   const [showProductImages, setShowProductImages] = useState(false);
   const [selectedImages, setSelectedImages] = useState(null);
-  const [search, setSearch] = useState("");
-  const [searchData, setSearchedData] = useState(null);
-  const showTableData = searchData ? searchData : data;
+  const [search, setSearch] = useState(null);
+  // const [searchData, setSearchedData] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [tableData, setTableData] = useState(data);
 
   const setUIRole = (role) => {
     return role == "1995"
@@ -29,6 +31,12 @@ const Table = ({
       ? "Product Manager"
       : "user";
   };
+
+  useEffect(() => {
+    if (!search) {
+      setTableData(data);
+    }
+  }, [data]);
 
   console.log("table data", data);
   //close Images Product Div
@@ -42,10 +50,21 @@ const Table = ({
       type === "users" ? "user" : type === "products" ? "product" : "category";
     searchApi(searchType, search).then((res) => {
       console.log("res search Api", res);
-      setSearchedData(res.data);
+      setTableData(res.data);
     });
   }
-
+  // handle data By Date
+  function handledataByDate(e) {
+    const value = e.target.value;
+    if (value===""){
+      setTableData(data)
+      return;  
+    }
+    setSelectedDate(value);
+    setTableData(() =>
+      tableData.filter((item) => handleDate(item.created_at) === value)
+    );
+  }
   //content of table
   const tableHeaderContent = tableHeader.map((item, index) => (
     <th key={index} className="px-2 py-2 sm:px-6 sm:py-3">
@@ -54,8 +73,8 @@ const Table = ({
   ));
 
   const tableBodyContent =
-    showTableData.length > 0 ? (
-      showTableData.map((row) => (
+    tableData.length > 0 ? (
+      tableData.map((row) => (
         <tr key={row.id} className="bg-white border-b hover:bg-gray-50">
           {tableHeader.map((col) => (
             <td key={col.key} className="px-2 py-2 sm:px-6 sm:py-4">
@@ -90,6 +109,8 @@ const Table = ({
                 </>
               ) : col.key === "role" && type === "users" ? (
                 setUIRole(row[col.key])
+              ) : col.key === "created_at" || col.key === "updated_at" ? (
+                handleDate(row[col.key])
               ) : (
                 row[col.key]
               )}
@@ -151,13 +172,37 @@ const Table = ({
     });
   }, []);
 
-  //show shearched data
+  //show shearched data filtered by search and date
+
+  // useEffect(() => {
+  //   if (search === "") {
+  //     setTableData(data);
+  //     setSearch(null);
+  //   }
+  //   const timer = setTimeout(() => {
+  //     getSearchedData();
+  //   }, 500);
+  //   return () => clearTimeout(timer);
+  // }, [search]);
+
   useEffect(() => {
-   const  timer = setTimeout(() => {
+  let filtered = data;
+
+  if (search && search !== "") {
+     setTimeout(() => {
       getSearchedData();
     }, 500);
-    return () => clearTimeout(timer);
-  }, [search]);
+    //  () => clearTimeout(timer);
+  }
+
+  if (selectedDate) {
+    filtered = filtered.filter(
+      (item) => handleDate(item.created_at) === selectedDate
+    );
+  }
+
+  setTableData(filtered);
+}, [search, selectedDate, data]);
 
   return (
     <>
@@ -171,6 +216,12 @@ const Table = ({
               setSearch(e.target.value);
             }}
             className="w-full sm:w-64 border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => handledataByDate(e)}
+            className="border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <div className="flex justify-end mb-2">
             <button
@@ -220,7 +271,7 @@ function ProductImages({ images, onClose }) {
   return (
     <>
       {showProductImages && (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.2)] flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[rgba(187,186,186,0.1)] flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-4 w-11/12 max-w-lg">
             <h2 className="text-lg font-semibold mb-3 text-gray-700">
               Product Images

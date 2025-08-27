@@ -8,7 +8,7 @@ const UsersTable = () => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [deletedUser, setDeletedUser] = useState(false);
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(5);
   const [pageCount, setPageCount] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const pagination = () => `limit=${limit}&page=${currentPage}`;
@@ -16,6 +16,8 @@ const UsersTable = () => {
     { name: "ID", key: "id" },
     { name: "NAME", key: "name" },
     { name: "EMAIL", key: "email" },
+    { name: "CREATED AT", key: "created_at" },
+    { name: "UPDATED AT", key: "updated_at" },
     { name: "Role", key: "role" },
   ];
 
