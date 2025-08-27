@@ -10,7 +10,7 @@ function getAuthConfig() {
     },
   };
 }
-export const ShowUsers =()=>axios.get(`${baseUrl}/users`,getAuthConfig())
+export const ShowUsers =(pagination)=>axios.get(`${baseUrl}/users?${pagination}`,getAuthConfig())
 export const getUsers =()=>axios.get(`${baseUrl}/user`,getAuthConfig())
 export const getUserById =(id)=>axios.get(`${baseUrl}/user/${id}`,getAuthConfig())
 export const editUserData =(id,userData)=>axios.post(`${baseUrl}/user/edit/${id}`,userData,getAuthConfig())

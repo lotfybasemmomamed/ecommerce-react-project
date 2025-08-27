@@ -70,7 +70,7 @@ function Form({
         navigate(goToPage);
       } else if (btnText === "Login") {
         const res = await login(formData);
-        // console.log("login res", res);
+        console.log("login res", res);
         cookie.set("Bearer", res.data.token);
         const goToPage =res.data.user.role=="1995"?"/dashboard":res.data.user.role=="1996"?"/dashboard/writer":"/"
         navigate(goToPage);
@@ -85,7 +85,7 @@ function Form({
         navigate("/dashboard/users");
       }
     } catch (err) {
-      showErrorMessage(err.response.data.message);
+      showErrorMessage(err.response.message);
     } finally {
       setLoading(false);
     }

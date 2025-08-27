@@ -2,12 +2,24 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { ShowUsers, getUsers } from "../../apis/UsersApis";
+import Pagination from "./Pagination";
 
-const Table = ({ data, deleteFunction, tableHeader, type }) => {
+const Table = ({ data, deleteFunction, tableHeader, type,currentPage,pageCount }) => {
   const [currentUserData, setCurrentUserData] = useState({});
   const [showProductImages, setShowProductImages] = useState(false);
   const [selectedImages, setSelectedImages] = useState(null);
 
+  const setUIRole = (role) => {
+    return role == "1995"
+      ? "admin"
+      : role == "1996"
+      ? "writer"
+      : role == "1999"
+      ? "Product Manager"
+      : "user";
+  };
+
+  console.log("table data",data)
   //close Images Product Div
   function closeImagesProductDiv() {
     setShowProductImages(false);
@@ -32,6 +44,7 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
                   alt={row.title}
                   className="w-12 h-12 object-cover rounded-md"
                 />
+    
               ) : col.key === "name" &&
                 row.id === currentUserData?.id &&
                 type == "users" ? (
@@ -55,6 +68,8 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
                     />
                   )}
                 </>
+              ) : col.key === "role" && type === "users" ? (
+                setUIRole(row[col.key])
               ) : (
                 row[col.key]
               )}
@@ -155,6 +170,7 @@ const Table = ({ data, deleteFunction, tableHeader, type }) => {
           </table>
         </div>
       </div>
+      <Pagination currentPage={currentPage} pageCount={pageCount}/>
     </>
   );
 };
@@ -185,9 +201,7 @@ function ProductImages({ images, onClose }) {
                   </>
                 </div>
               ) : (
-                <span className="flex justify-center text-2xl">
-                  No Images
-                </span>
+                <span className="flex justify-center text-2xl">No Images</span>
               )}
             </>
 

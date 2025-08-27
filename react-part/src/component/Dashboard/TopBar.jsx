@@ -114,7 +114,7 @@ function TopBar() {
 
             <div className="hidden sm:block leading-tight">
               <p className="text-sm font-medium">{userData.name}</p>
-              <p className="text-xs text-gray-500">{userData.role=="1995"?"admin":userData.role=="1996"?"writer":"user"}</p>
+              <p className="text-xs text-gray-500">{userData.role=="1995"?"admin":userData.role=="1996"?"writer":userData.role=="1999"?"Product Manager":"user"}</p>
             </div>
             <FontAwesomeIcon
               icon={faChevronDown}

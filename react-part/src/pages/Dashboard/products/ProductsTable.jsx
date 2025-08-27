@@ -7,6 +7,10 @@ const ProductsTable = () => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [deletedProduct, setDeletedProduct] = useState(false);
+  const [limit,setLimit]=useState(5)
+  const [pageCount, setPageCount] = useState(5);
+  const [currentPage,setCurrentPage]=useState(1)
+  const pagination =()=>`limit=${limit}&page=${currentPage}`
   const tableHeader = [
     { name: "ID", key: "id" },
     { name: "TITLE", key: "title" },
@@ -19,16 +23,17 @@ const ProductsTable = () => {
   //get all products
   useEffect(() => {
     setLoading(true);
-    getProducts()
+    getProducts(pagination())
       .then((res) => {
         console.log("res products from product table is ", res);
-        setProducts(res.data);
+        setProducts(res.data.data);
+        setPageCount(res.data.last_page)
       })
       .catch((err) => {
         alert(err.response?.data?.message);
       })
       .finally(() => setLoading(false));
-  }, [deletedProduct]);
+  }, [deletedProduct,currentPage]);
 
   //delete product
   function handleDeleteProduct(id) {
@@ -43,6 +48,8 @@ const ProductsTable = () => {
         deleteFunction={handleDeleteProduct}
         tableHeader={tableHeader}
         type="products"
+        currentPage={setCurrentPage}
+        pageCount={pageCount}
       />
     </>
   );

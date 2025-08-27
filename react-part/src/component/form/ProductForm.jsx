@@ -64,7 +64,7 @@ export default function ProductForm({ message }) {
     getCategories()
       .then((res) => {
         console.log(res);
-        setCategories(res.data);
+        setCategories(res.data.data);
       })
       .finally(() => setLoading(false));
   }, []);

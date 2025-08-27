@@ -8,6 +8,10 @@ const UsersTable = () => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [deletedUser, setDeletedUser] = useState(false);
+  const [limit, setLimit] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pagination = () => `limit=${limit}&page=${currentPage}`;
   const tableHeader = [
     { name: "ID", key: "id" },
     { name: "NAME", key: "name" },
@@ -18,13 +22,14 @@ const UsersTable = () => {
   //get all users
   useEffect(() => {
     setLoading(true);
-    ShowUsers()
+    ShowUsers(pagination())
       .then((res) => {
         console.log("res show users is", res.data);
-        setUsers(res.data);
+        setUsers(res.data.data);
+        setPageCount(res.data.last_page)
       })
       .finally(() => setLoading(false));
-  }, [deletedUser]);
+  }, [deletedUser, currentPage]);
   //delete user
   function handleDeleteUser(id, currentUserId) {
     if (id != currentUserId) {
@@ -40,6 +45,8 @@ const UsersTable = () => {
         deleteFunction={handleDeleteUser}
         tableHeader={tableHeader}
         type="users"
+        currentPage={setCurrentPage}
+        pageCount={pageCount}
       />
     </>
   );

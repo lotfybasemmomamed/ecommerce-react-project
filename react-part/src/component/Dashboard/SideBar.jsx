@@ -62,7 +62,7 @@ function SideBar() {
               </NavLink>
             )}
 
-            <NavLink
+            {/* <NavLink
               to="writer"
               className={({ isActive }) =>
                 `flex items-center gap-2 p-2 rounded cursor-pointer 
@@ -73,7 +73,7 @@ function SideBar() {
             >
               <FontAwesomeIcon icon={faPen} />
               {menuBar && windowWidth > 768 && "Writer"}
-            </NavLink>
+            </NavLink> */}
 
             <NavLink
               to="categories"

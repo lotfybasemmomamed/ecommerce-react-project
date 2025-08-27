@@ -11,7 +11,7 @@ function getAuthConfig() {
     },
   };
 }
-export const getCategories =()=>axios.get(`${baseUrl}/categories`,getAuthConfig())
+export const getCategories =(pagination)=>axios.get(`${baseUrl}/categories?${pagination}`,getAuthConfig())
 export const getCategoryById =(id)=>axios.get(`${baseUrl}/category/${id}`,getAuthConfig())
 export const deleteCategory =(id)=>axios.delete(`${baseUrl}/category/${id}`,getAuthConfig())
 export const addCategory =(categoryData)=>axios.post(`${baseUrl}/category/add`,categoryData,{
