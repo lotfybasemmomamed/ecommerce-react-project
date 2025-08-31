@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { addCategory } from "../../apis/categoriesApis";
 import { editCategory, getCategoryById } from "../../apis/categoriesApis";
 import { useParams } from "react-router-dom";
-import Loading from "../Loading";
+import Loading from "../Dashboard/Loading";
 
 export default function CategoryForm({ btnMessage }) {
   const fileInputRef = useRef(null);

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { getCategories } from "../../apis/categoriesApis";
-import Loading from "../Loading";
+import Loading from "../Dashboard/Loading";
 import { addProduct, getProductById } from "../../apis/ProductsApis";
 import { addProductImage } from "../../apis/ProductsApis";
 import { editProduct } from "../../apis/ProductsApis";

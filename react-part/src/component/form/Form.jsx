@@ -1,4 +1,4 @@
-import Loading from "../Loading";
+import Loading from "../Dashboard/Loading";
 import React, { useState, useEffect } from "react";
 import { register, login } from "../../apis/AuthApiS";
 import { useNavigate } from "react-router-dom";

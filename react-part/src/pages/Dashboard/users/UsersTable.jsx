@@ -2,7 +2,7 @@ import { deleteUser, ShowUsers } from "../../../apis/UsersApis";
 import Table from "../../../component/Dashboard/Table";
 // import { deleteUser } from "../../apis/UsersApis";
 import { useEffect, useState } from "react";
-import Loading from "../../../component/Loading";
+import Loading from "../../../component/Dashboard/Loading";
 
 const UsersTable = () => {
   const [loading, setLoading] = useState(false);

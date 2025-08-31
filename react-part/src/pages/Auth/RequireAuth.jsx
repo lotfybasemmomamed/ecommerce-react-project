@@ -1,6 +1,6 @@
 import Cookies from "universal-cookie";
 import { Outlet, useNavigate } from "react-router-dom";
-import Loading from "../../component/Loading";
+import Loading from "../../component/Dashboard/Loading";
 import { getUsers } from "../../apis/UsersApis";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";

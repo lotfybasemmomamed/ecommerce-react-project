@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Search,
   User,
@@ -10,11 +10,14 @@ import {
   Plus,
   MapPin,
 } from "lucide-react";
+import { getCategories } from "../../apis/categoriesApis";
+import truncateText from "../../helpers/truncateText";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [expandedMobileSection, setExpandedMobileSection] = useState(null);
+  const [categoriesList, setCategoriesList] = useState([]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -29,17 +32,22 @@ const Header = () => {
       expandedMobileSection === section ? null : section
     );
   };
+  const categoryLinks = categoriesList.map((category) => (
+    <a
+      key={category.id}
+      href="#"
+      className="text-sm text-gray-700 hover:text-blue-600"
+    >
+      {truncateText(category.title, 10)}
+    </a>
+  ));
 
-  const categoryShow = (
-    <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-      <a
-        href="#"
-        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-      >
-        Vegetables
-      </a>
-    </div>
-  );
+  useEffect(() => {
+    getCategories().then((res) => {
+      setCategoriesList(res.data);
+      console.log("categories List is ", categoriesList, res);
+    });
+  }, []);
 
   return (
     <header className="w-full bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
@@ -142,16 +150,25 @@ const Header = () => {
                 <span>Home</span>
               </a>
 
-              <div className="relative">
+              {/* category icon */}
+              <div className="relative group">
                 <button
-                  onClick={() => toggleDropdown("categories")}
-                  className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors"
+                  onClick={() => (window.location.pathname = "/categories")}
+                  className="flex items-center space-x-1 cursor-pointer text-gray-700 hover:text-blue-600 transition-colors"
                 >
                   <span>Categories</span>
                   <ChevronDown size={16} />
                 </button>
-                {activeDropdown === "categories" && categoryShow}
+
+                <div className="hidden group-hover:block absolute top-full left-0 pt-2 z-50">
+                  <div className="bg-white mt-2 border border-gray-200 rounded-lg shadow-lg px-6 py-4">
+                    <div className="grid grid-cols-8 gap-x-4 gap-y-2 w-[800px]">
+                      {categoryLinks}
+                    </div>
+                  </div>
+                </div>
               </div>
+              {/* end category */}
 
               <div className="relative">
                 <button
@@ -332,31 +349,10 @@ const Header = () => {
                   />
                 </button>
                 {expandedMobileSection === "categories" && (
-                  <div className="bg-gray-50 border-t border-gray-100">
-                    <a
-                      href="#"
-                      className="block px-8 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-white"
-                    >
-                      Vegetables
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-8 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-white"
-                    >
-                      Fruits
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-8 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-white"
-                    >
-                      Dairy
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-8 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-white"
-                    >
-                      Meat
-                    </a>
+                  <div className="bg-gray-50 border-t border-gray-100 p-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      {categoryLinks}
+                    </div>
                   </div>
                 )}
               </div>

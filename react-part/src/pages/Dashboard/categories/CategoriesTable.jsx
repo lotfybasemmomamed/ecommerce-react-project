@@ -1,6 +1,6 @@
 import Table from "../../../component/Dashboard/Table";
 import { useEffect, useState } from "react";
-import Loading from "../../../component/Loading";
+import Loading from "../../../component/Dashboard/Loading";
 import { getCategories, deleteCategory } from "../../../apis/categoriesApis";
 
 const CategoriesTable = () => {

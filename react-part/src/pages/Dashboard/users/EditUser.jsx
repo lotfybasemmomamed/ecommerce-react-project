@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import AuthForm from "../../../component/form/Form";
 import { useEffect, useState } from "react";
 import { getUserById } from "../../../apis/UsersApis";
-import Loading from "../../../component/Loading";
+import Loading from "../../../component/Dashboard/Loading";
 
 function EditUser() {
   const [userData, setUserData] = useState({
