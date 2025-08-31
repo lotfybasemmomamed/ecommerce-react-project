@@ -1,4 +1,4 @@
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/website/HomePage";
 import { Routes, Route } from "react-router-dom";
 import Form from "./component/form/Form";
 import GoogleCallBack from "./pages/Auth/GoogleCallBack";

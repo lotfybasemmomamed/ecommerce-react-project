@@ -16,8 +16,19 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        return Product::with('Images')->where('status', '=', 'published')->paginate($request->input('limit', 10));
+        $allProducts = Product::with('Images')->get();
+        $products = Product::with('Images')->where('status', '=', 'published')->paginate($request->input('limit', 10));
+        $finalResult = $request->input('limit') ? $products : $allProducts;
+        return $finalResult;
     }
+
+
+    public function getLastSaleProducts(Request $request)
+    {
+        $products = Product::with('Images')->where('status', '=', 'published')->where('discount', '>', '0')->latest()->take(5)->get();
+        return $products;
+    }
+
 
     /**
      * Show the form for creating a new resource.

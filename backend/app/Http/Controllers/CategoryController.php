@@ -13,9 +13,9 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $allCategories =category::all();
+        $allCategories = Category::all();
         $categories = Category::paginate($request->input('limit', 10));
-        $finalResult=$request->input('limit')?$categories:$allCategories;
+        $finalResult = $request->input('limit') ? $categories : $allCategories;
         return $finalResult;
     }
 

@@ -1,5 +1,3 @@
-import React from "react";
-
 function handleDate(date) {
   const selectedDate = new window.Date(date);
   const year = selectedDate.getFullYear();
