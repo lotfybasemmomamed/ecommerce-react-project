@@ -30,6 +30,20 @@ class ProductController extends Controller
     }
 
 
+    public function getLatest(Request $request)
+    {
+        $products = Product::with('Images')->where('status', '=', 'published')->latest()->take(6)->get();
+        return $products;
+    }
+
+    public function getTopRated(Request $request)
+    {
+        $products = Product::with('Images')->where('status', '=', 'published')->where('rating', '=', '5')->latest()->take(10)->get();
+        return $products;
+    }
+
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -120,13 +134,13 @@ class ProductController extends Controller
         }
     }
 
-     // Search On Users
-     public function search(Request $request)
-     {
-            $query = $request->input('title');
-            $results = Product::with('Images')->where('title', 'like', "%$query%")->get();
-            return response()->json($results);
-     }
+    // Search On Users
+    public function search(Request $request)
+    {
+        $query = $request->input('title');
+        $results = Product::with('Images')->where('title', 'like', "%$query%")->get();
+        return response()->json($results);
+    }
 
 
     /**

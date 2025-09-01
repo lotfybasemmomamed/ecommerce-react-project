@@ -13,6 +13,8 @@ function getAuthConfig() {
 }
 export const getProducts =(pagination)=>axios.get(`${baseUrl}/products?${pagination}`,getAuthConfig())
 export const getLatestsSaleProducts =()=>axios.get(`${baseUrl}/latest-sale`,getAuthConfig())
+export const getLatestsProducts =()=>axios.get(`${baseUrl}/latest`,getAuthConfig())
+export const getTopRatedProducts =()=>axios.get(`${baseUrl}/top-rated`,getAuthConfig())
 export const getProductById =(id)=>axios.get(`${baseUrl}/product/${id}`,getAuthConfig())
 export const deleteProduct =(id)=>axios.delete(`${baseUrl}/product/${id}`,getAuthConfig())
 export const addProduct =(productData)=>axios.post(`${baseUrl}/product/add`,productData,{

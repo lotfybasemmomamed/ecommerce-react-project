@@ -64,7 +64,7 @@ const Header = () => {
                 <div className="hidden sm:block">
                   <div className="text-blue-600 font-bold text-lg">Blue</div>
                   <div className="text-gray-800 font-bold text-lg -mt-1">
-                    Berry
+                    Circuit
                   </div>
                 </div>
               </div>
@@ -138,7 +138,7 @@ const Header = () => {
           <div className="flex items-center justify-between h-14">
             <nav className="flex items-center space-x-8">
               <a
-                href="#"
+                 onClick={()=>window.location.pathname="/"}
                 className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors"
               >
                 <div className="grid grid-cols-2 gap-1 w-4 h-4">
@@ -329,6 +329,7 @@ const Header = () => {
               {/* Home */}
               <a
                 href="#"
+                onClick={()=>window.location.pathname="/"}
                 className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 border-b border-gray-100"
               >
                 <span className="text-sm">Home</span>

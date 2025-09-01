@@ -1,7 +1,7 @@
 import React from "react";
 import ProductList from "./ProductList";
 
-function ProductSection({title}) {
+function ProductSection({title,productData}) {
   return (
     <section className="w-full bg-blue-50 py-12">
       <div className="container mx-auto px-4">
@@ -15,7 +15,7 @@ function ProductSection({title}) {
           </button>
         </div>
 
-        <ProductList />
+        <ProductList products={productData} />
       </div>
     </section>
   );

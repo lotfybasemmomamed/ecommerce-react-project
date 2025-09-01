@@ -33,6 +33,8 @@ Route::controller(AuthController::class)->group(function () {
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/latest-sale', [ProductController::class, 'getLastSaleProducts']);
+Route::get('/latest', [ProductController::class, 'getLatest']);
+Route::get('/top-rated', [ProductController::class, 'getTopRated']);
 
 Route::get('/login-google', [socialAuthController::class, 'redirectToProvider']);
 Route::get('/auth/google/callback', [socialAuthController::class, 'handleCallback']);
