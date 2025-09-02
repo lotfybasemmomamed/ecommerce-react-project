@@ -31,7 +31,10 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/category/{id}', [CategoryController::class, 'show']);
+
 Route::get('/products', [ProductController::class, 'index']);
+Route::get('/product/{id}', [ProductController::class, 'show']);
 Route::get('/latest-sale', [ProductController::class, 'getLastSaleProducts']);
 Route::get('/latest', [ProductController::class, 'getLatest']);
 Route::get('/top-rated', [ProductController::class, 'getTopRated']);
@@ -54,7 +57,6 @@ Route::middleware('auth:api')->group(function () {
     // Product Manger
     Route::middleware('checkProductManager')->controller(CategoryController::class)->group(function () {
 
-        Route::get('/category/{id}', 'show');
         Route::post('/category/search', 'search');
         Route::post('/category/edit/{id}', 'edit');
         Route::post('/category/add', 'store');
@@ -63,7 +65,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::middleware('checkProductManager')->controller(ProductController::class)->group(function () {
 
-        Route::get('/product/{id}', 'show');
+
         Route::post('/product/search', 'search');
         Route::post('/product/edit/{id}', 'update');
         Route::post('/product/add', 'store');

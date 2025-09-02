@@ -18,6 +18,7 @@ import EditProduct from "./pages/Dashboard/products/EditProduct";
 import AddProduct from "./pages/Dashboard/products/AddProduct";
 import Website from "./pages/website/Website";
 import CategoriesPage from "./pages/website/CategoriesPage";
+import ProductPage from "./pages/website/ProductPage";
 function App() {
   return (
     <Routes>
@@ -39,6 +40,7 @@ function App() {
       <Route path="/" element={<Website />}>
       <Route path="/" element={<HomePage />} />
         <Route path="categories" element={<CategoriesPage/>} />
+        <Route path="product/:id" element={<ProductPage/>} />
       </Route>
       {/* protected routes */}
       <Route element={<RequireAuth allowedRole={["1995", "1996", "1999"]} />}>

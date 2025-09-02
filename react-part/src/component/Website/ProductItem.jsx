@@ -3,7 +3,7 @@ export default function ProductItem({ productData }) {
   const isNew = isNewValues[Math.floor(Math.random() * isNewValues.length)];
 
   return (
-    <div className="w-[95%] max-w-xs m-2 rounded-2xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition p-4 flex flex-col relative">
+    <div onClick={()=>window.location.pathname=`product/${productData.id}`} className="w-[95%] cursor-pointer max-w-xs m-2 rounded-2xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition p-4 flex flex-col relative">
       {isNew && (
         <div className="absolute bg-blue-500 text-white text-xs px-2 py-1 rounded-tr-lg rounded-bl-lg">
           NEW
