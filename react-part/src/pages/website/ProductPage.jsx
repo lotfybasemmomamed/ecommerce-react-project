@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../../apis/ProductsApis";
+import { getProductById, getProducts } from "../../apis/ProductsApis";
 import ProductSection from "../../component/Website/ProductSection";
 import WebsiteLoading from "../../component/Website/WebsiteLoading";
 
@@ -25,6 +25,21 @@ function ProductPage() {
         setLoading(false);
       });
   }, []);
+
+  //get related product
+  useEffect(() => {
+    const category = singleProductDetails?.category;
+    if (category) {
+      getProducts().then((res) => {
+        console.log("getProducts res", res);
+        const related_Products = res.data;
+        const filteredProduct = related_Products.filter(
+          (product) => (product.category === category&& product.id !== singleProductDetails.id)
+        );
+        setRelatedProducts(filteredProduct);
+      });
+    }
+  }, [singleProductDetails]);
 
   // get images products
   useEffect(() => {

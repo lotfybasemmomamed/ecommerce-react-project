@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { getCategories } from "../../apis/categoriesApis";
 import truncateText from "../../helpers/truncateText";
+import CartDropdown from "./CartDropdown";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -70,7 +71,7 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Category Dropdown & Search - Desktop */}
+            {/* Category Dropdown & Search */}
             <div className="hidden lg:flex items-center flex-1 max-w-2xl mx-8">
               <div className="relative">
                 <select className="bg-white border border-gray-300 rounded-l-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none pr-8">
@@ -94,7 +95,7 @@ const Header = () => {
               </button>
             </div>
 
-            {/* Right Side Icons - Desktop */}
+            {/* Right Side Icons  */}
             <div className="hidden lg:flex items-center space-x-6 flex-shrink-0">
               <div className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 cursor-pointer transition-colors">
                 <User size={20} />
@@ -112,12 +113,17 @@ const Header = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 cursor-pointer transition-colors relative">
+              <div className="relative group flex items-center space-x-2 text-gray-600 hover:text-blue-600 cursor-pointer transition-colors">
                 <ShoppingCart size={20} />
                 <div className="text-sm">
                   <div className="text-gray-500">4 Items</div>
                   <div className="font-semibold">Cart</div>
                 </div>
+                {/* card model */}
+                <div className="hidden group-hover:block ">
+                  <CartDropdown />
+                </div>
+                {/* end card model */}
               </div>
             </div>
 
@@ -138,7 +144,7 @@ const Header = () => {
           <div className="flex items-center justify-between h-14">
             <nav className="flex items-center space-x-8">
               <a
-                 onClick={()=>window.location.pathname="/"}
+                onClick={() => (window.location.pathname = "/")}
                 className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors"
               >
                 <div className="grid grid-cols-2 gap-1 w-4 h-4">
@@ -329,7 +335,7 @@ const Header = () => {
               {/* Home */}
               <a
                 href="#"
-                onClick={()=>window.location.pathname="/"}
+                onClick={() => (window.location.pathname = "/")}
                 className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 border-b border-gray-100"
               >
                 <span className="text-sm">Home</span>

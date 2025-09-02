@@ -1,16 +1,27 @@
+import { addToCart } from "../../helpers/cartOpetation";
+
 export default function ProductItem({ productData }) {
   const isNewValues = ["new", "hot", "sale", "normal"];
   const isNew = isNewValues[Math.floor(Math.random() * isNewValues.length)];
+  const stockStatus =
+    productData.stock > 5
+      ? { text: "In Stock", color: "text-green-600", icon: "✔" }
+      : productData.stock > 0
+      ? { text: "Low Stock", color: "text-orange-500", icon: "⚠" }
+      : { text: "Out of Stock", color: "text-red-600", icon: "✖" };
 
   return (
-    <div onClick={()=>window.location.pathname=`product/${productData.id}`} className="w-[95%] cursor-pointer max-w-xs m-2 rounded-2xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition p-4 flex flex-col relative">
+    <div className="w-[95%]  max-w-xs m-2 rounded-2xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition p-4 flex flex-col relative">
       {isNew && (
-        <div className="absolute bg-blue-500 text-white text-xs px-2 py-1 rounded-tr-lg rounded-bl-lg">
+        <div className="absolute z-50 bg-blue-500 text-white text-xs px-2 py-1 rounded-tr-lg rounded-bl-lg">
           NEW
         </div>
       )}
 
-      <div className="relative w-full h-52 flex justify-center items-center overflow-hidden rounded-xl">
+      <div
+        onClick={() => (window.location.pathname = `product/${productData.id}`)}
+        className="cursor-pointer relative w-full h-52 flex justify-center items-center overflow-hidden rounded-xl"
+      >
         <img
           src={productData.images[0].image}
           alt={productData.title}
@@ -25,9 +36,16 @@ export default function ProductItem({ productData }) {
       </div>
 
       <div className="flex flex-col mt-3">
-        <span className="text-blue-600 text-sm font-medium">
-          {productData.category}
-        </span>
+        <div className="flex justify-between">
+          <span className="text-blue-600 text-sm font-medium">
+            {productData.category}
+          </span>
+           <span
+            className={`text-sm font-medium flex items-center gap-1 ${stockStatus.color}`}
+          >
+            {stockStatus.icon} {stockStatus.text} ({productData.stock})
+          </span>
+        </div>
 
         <div className="flex items-center gap-1 mt-1">
           {Array.from({ length: 5 }, (_, i) => (
@@ -66,7 +84,16 @@ export default function ProductItem({ productData }) {
         </div>
 
         <div className="flex gap-2 mt-4">
-          <button className="flex-1 bg-blue-600 text-white text-sm py-2 rounded-xl hover:bg-blue-700 transition">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart({
+                product_id: productData.id,
+                count: 1,
+              });
+            }}
+            className="cursor-pointer flex-1 bg-blue-600 text-white text-sm py-2 rounded-xl hover:bg-blue-700 transition"
+          >
             Add to Cart
           </button>
           <button className="flex-1 border border-blue-600 text-blue-600 text-sm py-2 rounded-xl hover:bg-blue-50 transition">

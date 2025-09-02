@@ -11,7 +11,13 @@ function getAuthConfig() {
     },
   };
 }
-export const getProducts =(pagination)=>axios.get(`${baseUrl}/products?${pagination}`,getAuthConfig())
+export const getProducts = (pagination) => {
+  const url = pagination
+    ? `${baseUrl}/products?${pagination}`
+    : `${baseUrl}/products`;
+
+  return axios.get(url, getAuthConfig());
+};
 export const getLatestsSaleProducts =()=>axios.get(`${baseUrl}/latest-sale`,getAuthConfig())
 export const getLatestsProducts =()=>axios.get(`${baseUrl}/latest`,getAuthConfig())
 export const getTopRatedProducts =()=>axios.get(`${baseUrl}/top-rated`,getAuthConfig())
