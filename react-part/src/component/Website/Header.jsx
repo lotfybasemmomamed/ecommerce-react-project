@@ -13,12 +13,19 @@ import {
 import { getCategories } from "../../apis/categoriesApis";
 import truncateText from "../../helpers/truncateText";
 import CartDropdown from "./CartDropdown";
+import Cookies from "universal-cookie";
+import { getUsers } from "../../apis/UsersApis";
+import { getProductsCart } from "../../apis/cartApis";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [expandedMobileSection, setExpandedMobileSection] = useState(null);
   const [categoriesList, setCategoriesList] = useState([]);
+  const [userDetails, setUserDetails] = useState({});
+  const [numberProductsCart, setNumberProductsCart] = useState(0);
+  const cookie = new Cookies();
+  const token = cookie.get("Bearer");
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -43,22 +50,55 @@ const Header = () => {
     </a>
   ));
 
+  //get role name
+  function getRoleName(role) {
+    switch (role) {
+      case "1995":
+        return "admin";
+      case "1996":
+        return "writer";
+      case "1999":
+        return "Product Manager";
+      default:
+        return "user";
+    }
+  }
+
+  //get number of products cart
+  useEffect(()=>{
+    getProductsCart().then((res)=>{
+      const productCart= res.data
+      setNumberProductsCart(productCart.length)
+    }
+    )
+  },[])
+
+  //get categories
   useEffect(() => {
     getCategories().then((res) => {
       setCategoriesList(res.data);
       console.log("categories List is ", categoriesList, res);
     });
   }, []);
+  //get user
+  useEffect(() => {
+    if (token) {
+      getUsers().then((res) => {
+        setUserDetails(res.data);
+        console.log("getUsers res", res);
+      });
+    }
+  }, []);
 
   return (
-    <header className="w-full bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+    <header className="w-full bg-white shadow-sm border-b border-gray-200 sticky top-0 z-[100]">
       {/* Top Bar */}
       <div className="bg-gray-50 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex items-center flex-shrink-0">
-              <div className="flex items-center space-x-2">
+            <div  className="cursor-pointer flex items-center flex-shrink-0" onClick={()=>window.location.pathname="/"}>
+              <div className="flex items-center space-x-2" >
                 <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                   <div className="text-white text-sm font-bold">B</div>
                 </div>
@@ -74,12 +114,11 @@ const Header = () => {
             {/* Category Dropdown & Search */}
             <div className="hidden lg:flex items-center flex-1 max-w-2xl mx-8">
               <div className="relative">
-                <select className="bg-white border border-gray-300 rounded-l-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none pr-8">
-                  <option disabled>Select category</option>
-                  <option>Vegetables</option>
-                  <option>Fruits</option>
-                  <option>Dairy</option>
-                  <option>Meat</option>
+                <select className=" bg-white border border-gray-300 rounded-l-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none pr-8">
+                  <option disabled selected >Select category</option>
+                  {categoriesList.map((cat)=>(<option> {truncateText(cat.title,9)}</option>))}
+
+                  
                 </select>
                 <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
               </div>
@@ -98,25 +137,42 @@ const Header = () => {
             {/* Right Side Icons  */}
             <div className="hidden lg:flex items-center space-x-6 flex-shrink-0">
               <div className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 cursor-pointer transition-colors">
-                <User size={20} />
+                {token ? (
+                  <User size={24} className="text-green-600" />
+                ) : (
+                  <User size={24} />
+                )}
                 <div className="text-sm">
-                  <div className="text-gray-500">Account</div>
-                  <div className="font-semibold">Login</div>
+                  {token ? (
+                    getRoleName(userDetails.role)
+                  ) : (
+                    <div className="text-gray-500">Account</div>
+                  )}
+                  {token ? (
+                    <div className="font-semibold">{userDetails.name}</div>
+                  ) : (
+                    <div
+                      onClick={(window.location.pathname = "/login")}
+                      className="font-semibold cursor-pointer hover:text-blue-500"
+                    >
+                      Login
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 cursor-pointer transition-colors relative">
                 <Heart size={20} />
                 <div className="text-sm">
-                  <div className="text-gray-500">3 Items</div>
+                  <div className="text-gray-500 hover:text-blue-600">3 Items</div>
                   <div className="font-semibold">Wishlist</div>
                 </div>
               </div>
 
               <div className="relative group flex items-center space-x-2 text-gray-600 hover:text-blue-600 cursor-pointer transition-colors">
                 <ShoppingCart size={20} />
-                <div className="text-sm">
-                  <div className="text-gray-500">4 Items</div>
+                <div className="text-sm hover:text-blue-600">
+                  <div className="text-gray-500 hover:text-blue-600">{numberProductsCart} Items</div>
                   <div className="font-semibold">Cart</div>
                 </div>
                 {/* card model */}
@@ -145,9 +201,9 @@ const Header = () => {
             <nav className="flex items-center space-x-8">
               <a
                 onClick={() => (window.location.pathname = "/")}
-                className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors"
+                className="flex cursor-pointer items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors"
               >
-                <div className="grid grid-cols-2 gap-1 w-4 h-4">
+                <div className="grid grid-cols-2 gap-1 w-4 h-4 ">
                   <div className="w-1.5 h-1.5 bg-current"></div>
                   <div className="w-1.5 h-1.5 bg-current"></div>
                   <div className="w-1.5 h-1.5 bg-current"></div>
@@ -283,8 +339,14 @@ const Header = () => {
 
             <div className="flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-700 cursor-pointer hover:bg-gray-200 transition">
               <MapPin size={16} className="text-gray-500" />
-              <span className="mx-2 text-sm font-medium">Surat</span>
-              <ChevronDown size={14} className="text-gray-500" />
+              <select>
+                <option selected disabled>Select Location</option>
+                <option>Cairo</option>
+                <option>Mansoura</option>
+                <option>Alexandria</option>
+              </select>
+              {/* <span className="mx-2 text-sm font-medium">Surat</span> */}
+              {/* <ChevronDown size={14} className="text-gray-500" /> */}
             </div>
           </div>
         </div>

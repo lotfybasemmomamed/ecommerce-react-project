@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { getProductsCart } from "../../apis/cartApis";
+import Cookies from "universal-cookie";
 import WebsiteLoading from "../../component/Website/WebsiteLoading";
 
 export default function CartPage() {
   const [productsCart, setProductsCart] = useState([]);
   const [coupon, setCoupon] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const cookie = new Cookies();
+  const token = cookie.get("Bearer");
   const deliveryCharges = 73.4;
 
   const subtotal = productsCart.reduce(
@@ -20,9 +22,7 @@ export default function CartPage() {
   const handleQuantity = (id, newQty) => {
     if (newQty < 1) return;
     setProductsCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, count: newQty } : item
-      )
+      prev.map((item) => (item.id === id ? { ...item, count: newQty } : item))
     );
   };
 
@@ -31,6 +31,10 @@ export default function CartPage() {
   };
 
   useEffect(() => {
+    if (!token) {
+      window.location.pathname = "/login";
+      return;
+    }
     setLoading(true);
     getProductsCart()
       .then((res) => {
@@ -120,8 +124,8 @@ export default function CartPage() {
                             />
                           ) : (
                             <span className="w-16 h-16 flex items-center justify-center bg-gray-100 text-gray-400 text-xs rounded-lg">
-  No Images
-</span>
+                              No Images
+                            </span>
                           )}
                           <span className="font-medium">{item.title}</span>
                         </td>
@@ -129,14 +133,18 @@ export default function CartPage() {
                         <td>
                           <div className="flex items-center border rounded-lg w-24 justify-between">
                             <button
-                              onClick={() => handleQuantity(item.id, item.count - 1)}
+                              onClick={() =>
+                                handleQuantity(item.id, item.count - 1)
+                              }
                               className="px-2"
                             >
                               -
                             </button>
                             <span>{item.count}</span>
                             <button
-                              onClick={() => handleQuantity(item.id, item.count + 1)}
+                              onClick={() =>
+                                handleQuantity(item.id, item.count + 1)
+                              }
                               className="px-2"
                             >
                               +
