@@ -316,13 +316,13 @@ const Header = () => {
                       href="#"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Health Tips
+                      Electronics
                     </a>
                     <a
                       href="#"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                      Recipes
+                      Laptops&PC
                     </a>
                   </div>
                 )}
@@ -345,8 +345,7 @@ const Header = () => {
                 <option>Mansoura</option>
                 <option>Alexandria</option>
               </select>
-              {/* <span className="mx-2 text-sm font-medium">Surat</span> */}
-              {/* <ChevronDown size={14} className="text-gray-500" /> */}
+  
             </div>
           </div>
         </div>
@@ -357,10 +356,7 @@ const Header = () => {
         <div className="flex items-center space-x-2">
           <div className="relative">
             <select className="bg-white border border-gray-300 rounded-l-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
-              <option>Vegetables</option>
-              <option>Fruits</option>
-              <option>Dairy</option>
-              <option>Meat</option>
+            {categoriesList.map((cat)=>(<option> {truncateText(cat.title,9)}</option>))}
             </select>
             <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
           </div>
@@ -528,13 +524,13 @@ const Header = () => {
                       href="#"
                       className="block px-8 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-white"
                     >
-                      Health Tips
+                      Electronics
                     </a>
                     <a
                       href="#"
                       className="block px-8 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-white"
                     >
-                      Recipes
+                      Laptops&PC
                     </a>
                   </div>
                 )}
