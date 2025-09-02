@@ -63,7 +63,8 @@ class ProductController extends Controller
             'description' => 'required',
             'price' => 'required | numeric',
             'discount' => 'required | numeric',
-            'About' => 'required'
+            'About' => 'required',
+            'stock' => 'required | numeric'
         ]);
         $productCreated = $product->create([
             'category' => $request->category,
@@ -72,6 +73,8 @@ class ProductController extends Controller
             'price' => $request->price,
             'About' => $request->About,
             'discount' => $request->discount,
+            'stock' => $request->stock
+
         ]);
         return $productCreated;
     }
@@ -104,6 +107,7 @@ class ProductController extends Controller
             'description' => 'required',
             'price' => 'required | numeric',
             'discount' => 'required | numeric',
+            'stock' => 'required | numeric',
             'About' => 'required'
         ]);
         $product->update([
@@ -113,6 +117,7 @@ class ProductController extends Controller
             'price' => $request->price,
             'About' => $request->About,
             'discount' => $request->discount,
+            'stock' => $request->stock
 
         ]);
         $product->status = 'published';
